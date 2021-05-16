@@ -234,7 +234,7 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
       setMessages(userMessages);
     }
     channel.send(JSON.stringify(text));
-    setMessage("");
+    // setMessage("");
   };
 
   const handleConnection = name => {
