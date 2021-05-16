@@ -11,7 +11,7 @@ import {
 import SweetAlert from "react-bootstrap-sweetalert";
 import { format } from "date-fns";
 import "./App.css";
-import UsersList from "./UsersList";
+import ChatUsersList from "./ChatUsersList";
 import MessageBox from "./MessageBox";
 
 // Use for remote connections
@@ -335,7 +335,7 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
             </Grid.Column>
           </Grid>
           <Grid>
-            <UsersList
+            <ChatUsersList
               users={users}
               toggleConnection={toggleConnection}
               connectedTo={connectedTo}

@@ -1,7 +1,7 @@
 //import React from 'react'
 import React, { useState, createContext } from "react";
 // eslint-disable-next-line
-import Container from "./Container";
+import Container from "./ChatFrontEndContainer";
 import './App.css'
 import VideoCallContent from './VideoBackEndHandler'
 // import ChatContent from './VideoBackEndHandler'

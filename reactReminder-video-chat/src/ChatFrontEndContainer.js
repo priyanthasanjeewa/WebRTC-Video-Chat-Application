@@ -1,8 +1,8 @@
 import React from "react";
-import ChatFrontEnd from "./WebSocketHandler";
+import ChatFrontEnd from "./WSSignalHandler";
 import { ConnectionConsumer, ChannelConsumer} from "./App";
 
-const Container = () => {
+const ChatFrontEndContainer = () => {
   return (
     <ConnectionConsumer>
       {({ connection, updateConnection }) => (
@@ -21,4 +21,4 @@ const Container = () => {
   );
 };
 
-export default Container
+export default ChatFrontEndContainer

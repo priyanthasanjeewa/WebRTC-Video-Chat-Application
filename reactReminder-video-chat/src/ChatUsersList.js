@@ -9,7 +9,7 @@ import {
 } from "semantic-ui-react";
 import avatar from "./avatar.png";
 
-const UsersList = ({ users, toggleConnection, connectedTo, connecting }) => {
+const ChatUsersList = ({ users, toggleConnection, connectedTo, connecting }) => {
   return (
     <Grid.Column width={5}>
       <Card fluid>
@@ -44,4 +44,4 @@ const UsersList = ({ users, toggleConnection, connectedTo, connecting }) => {
   );
 };
 
-export default UsersList;
+export default ChatUsersList;
