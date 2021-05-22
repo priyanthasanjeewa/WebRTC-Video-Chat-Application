@@ -76,3 +76,16 @@ video{
   flex-direction: column-reverse;
   align-items: center;
 }
+
+.avatar {
+  height: 200px;
+  width: 200px;
+}
+
+.text-bold {
+  font-weight: bold;
+ }
+
+.textColor{
+  color : 'green'
+}

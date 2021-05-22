@@ -11,6 +11,7 @@ import {
   Comment
 } from "semantic-ui-react";
 import { formatRelative } from "date-fns";
+// eslint-disable-next-line
 import avatar from "./avatar.png";
 
 const MessageBox = ({ messages, connectedTo, message, setMessage, sendMsg, name }) => {
@@ -28,9 +29,9 @@ const MessageBox = ({ messages, connectedTo, message, setMessage, sendMsg, name 
               <Comment.Group>
                 {messages[connectedTo].map(({ name: sender, message: text, time }) => (
                   <Comment key={`msg-${name}-${time}`}>
-                    <Comment.Avatar src={avatar} />
+                    {/* <Comment.Avatar className="avatar" src={avatar} /> */}
                     <Comment.Content>
-                      <Comment.Author>{sender === name ? 'You' : sender}</Comment.Author>
+                      <Comment.Author className="text-bold" style={{color: 'yellow'}}>{sender === name ? 'You' : sender}</Comment.Author>
                       <Comment.Metadata>
                         <span>
                           {formatRelative(new Date(time), new Date())}

@@ -30,7 +30,7 @@ const ChatUsersList = ({ users, toggleConnection, connectedTo, connecting }) => 
                       {connectedTo === userName ? "Disconnect" : "Connect"}
                     </Button>
                   </List.Content>
-                  <Image avatar src={avatar} />
+                  <Image avatar className="avatar" src={avatar}  />
                   <List.Content>
                     <List.Header>{userName}</List.Header>
                   </List.Content>

@@ -13,6 +13,9 @@ import { format } from "date-fns";
 import "./App.css";
 import ChatUsersList from "./ChatUsersList";
 import MessageBox from "./MessageBox";
+import VideoCall from "./VideoCallHandler";
+// eslint-disable-next-line
+import { createOffer, initiateConnection, sendAnswer, addCandidate, initiateLocalStream, listenToConnectionEvents } from './modules/WebRTCModule'
 
 // Use for remote connections
 const configuration = {
@@ -33,14 +36,19 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
   const [connecting, setConnecting] = useState(false);
   const [alert, setAlert] = useState(null);
   const connectedRef = useRef();
+  const localVideoRef = useRef();
+  const remoteVideoRef = useRef();
   const webSocket = useRef(null);
   const [message, setMessage] = useState("");
   const messagesRef = useRef({});
   const [messages, setMessages] = useState({});
 
   useEffect(() => {
-    webSocket.current = new WebSocket('ws://127.0.0.1:9000');
+    // webSocket.current = new WebSocket('ws://127.0.0.1:9000');
+    webSocket.current = new WebSocket('ws://192.168.56.103:18099');
     webSocket.current.onmessage = message => {
+      // console.log("RECEIVED MSG : "+message);
+      console.log("RECEIVED MSG : "+JSON.stringify(message));
       const data = JSON.parse(message.data);
       setSocketMessages(prev => [...prev, data]);
     };
@@ -52,6 +60,7 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
 
   useEffect(() => {
     let data = socketMessages.pop();
+    console.log(data);
     if (data) {
       switch (data.type) {
         case "connect":
@@ -88,6 +97,8 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
 
   const send = data => {
     webSocket.current.send(JSON.stringify(data));
+    console.log("SENT MSG : "+JSON.stringify(data));
+    console.log(data);
   };
 
   const handleLogin = () => {
@@ -139,6 +150,18 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
       setIsLoggedIn(true);
       setUsers(loggedIn);
       let localConnection = new RTCPeerConnection(configuration);
+
+      // getting local video stream
+      // eslint-disable-next-line
+      // const localStream = initiateLocalStream();
+      // localVideoRef.current = localStream;
+     
+      // navigator.mediaDevices.getUserMedia({video:true, audio:true}, function(stream) {
+      //   localConnection.addStream(stream);
+      // });
+    
+      // console.log("Local stream is initiated!");
+
       //when the browser finds an ice candidate we send it to another peer
       localConnection.onicecandidate = ({ candidate }) => {
         let connectedTo = connectedRef.current;
@@ -183,6 +206,7 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
 
     connection
       .setRemoteDescription(new RTCSessionDescription(offer))
+      // .then(() => connection.addStream(localVideoRef.current))
       .then(() => connection.createAnswer())
       .then(answer => connection.setLocalDescription(answer))
       .then(() =>
@@ -207,10 +231,17 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
   //when another user answers to our offer
   const onAnswer = ({ answer }) => {
     connection.setRemoteDescription(new RTCSessionDescription(answer));
+    // when a remote user adds stream to the peer connection, we display it
+    // connection.ontrack = function (e) {
+    //   if (remoteVideoRef.srcObject !== e.streams[0]) {
+    //     remoteVideoRef.srcObject = e.streams[0]
+    //   }
+    // }
   };
 
   //when we got ice candidate from another user
   const onCandidate = ({ candidate }) => {
+    console.log("ON CANDIDATE : "+candidate);
     connection.addIceCandidate(new RTCIceCandidate(candidate));
   };
 
@@ -236,6 +267,24 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
     channel.send(JSON.stringify(text));
     // setMessage("");
   };
+
+  //when a user clicks the call button
+  const startCall = () => {
+    displayVideos();
+  }
+
+  const displayVideos = () => {
+    return <div >
+      <div>
+        <label>{name}</label>
+        <video ref={localVideoRef.current} autoPlay playsInline></video>
+      </div>
+      <div>
+        <label>{connectedRef.current}</label>
+        <video ref={remoteVideoRef.current} autoPlay playsInline></video>
+      </div>
+    </div>
+  }
 
   const handleConnection = name => {
     // eslint-disable-next-line
@@ -347,6 +396,14 @@ const Chat = ({ connection, updateConnection, channel, updateChannel }) => {
               message={message}
               setMessage={setMessage}
               sendMsg={sendMsg}
+              name={name}
+            />
+            <VideoCall
+              messages={messages}
+              connectedTo={connectedTo}
+              message={message}
+              setMessage={setMessage}
+              startCall={startCall}
               name={name}
             />
           </Grid>

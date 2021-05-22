@@ -3,6 +3,7 @@ import React, { useState, createContext } from "react";
 // eslint-disable-next-line
 import Container from "./ChatFrontEndContainer";
 import './App.css'
+// eslint-disable-next-line 
 import VideoCallContent from './VideoBackEndHandler'
 // import ChatContent from './VideoBackEndHandler'
 
@@ -28,7 +29,7 @@ const App = () => {
     <ConnectionContext.Provider value={{ connection, updateConnection }}>
       <ChannelContext.Provider value={{ channel, updateChannel }}>
         <Container />
-        <VideoCallContent/>
+        {/* <VideoCallContent/> */}
       </ChannelContext.Provider>
     </ConnectionContext.Provider>    
   );
